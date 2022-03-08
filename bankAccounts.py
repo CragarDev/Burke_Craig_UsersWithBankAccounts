@@ -77,7 +77,7 @@ class BankAccount:
         print(f"======= {cls.bank_name} =======")
         print(f"Number of users: {len(cls.all_bank_accounts)}")
         for each_account in cls.all_bank_accounts:
-            print(each_account)
+            print(each_account.account_name)
         cls.print_all_balances()
 
     @ classmethod
