@@ -16,8 +16,6 @@ class User:
         self.has_savings = False
         User.all_users.append(self)
 
-# t-  ---------------------------------------------------------------------------------
-
     def openCheckingAccount(self, account_name, interest_rate, amount):
         self.checking = BankAccount(
             self.user_name, "Checking", account_name, interest_rate, amount)
