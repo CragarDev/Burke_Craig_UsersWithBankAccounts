@@ -4,23 +4,29 @@ from bankAccounts import BankAccount
 # * Craig Burke - Assignment: Users With Bank Accounts
 #  User class
 class User:
+    all_users = []
 
-    def __init__(self, name, email, age):
-        self.name = name
-        self.email = email
-        self.age = age
+    def __init__(self, data):
+
+        self.name = data["name"]
+        self.email = data["email"]
+        self.age = data["age"]
+        self.user_name = data["user_name"]
         self.has_checking = False
         self.has_savings = False
+        User.all_users.append(self)
+
+# t-  ---------------------------------------------------------------------------------
 
     def openCheckingAccount(self, account_name, interest_rate, amount):
         self.checking = BankAccount(
-            "Checking", account_name, interest_rate, amount)
+            self.user_name, "Checking", account_name, interest_rate, amount)
         self.has_checking = True
         return self
 
     def openSavingsAccount(self, account_name, interest_rate, amount):
         self.savings = BankAccount(
-            "Savings", account_name, interest_rate, amount)
+            self.user_name, "Savings", account_name, interest_rate, amount)
         self.has_savings = True
         return self
 
@@ -42,42 +48,74 @@ class User:
         return self
 
 
+hattieHam_data = {
+    "name": "Harriet Hammer",
+    "email": "harham@someemail.com",
+    "age": 26,
+    "user_name": "hattiHam"
+}
+
+pauleyBoy_data = {
+    "name": "Paul McCartney",
+    "email": "pMc@theBeatles.com",
+    "age": 79,
+    "user_name": "pauleyBoy"
+}
+
+capAmer_data = {
+    "name": "Steve Rogers",
+    "email": "ImTheBest@avengers.com",
+    "age": 180,
+    "user_name": "capAmer"
+}
+
+
 # Initialize Users
-hattieHam = User("Harriet Hammer", "harham@someemail.com", 26)
-pauleyBoy = User("Paul McCartney", "pMc@theBeatles.com", 79)
+hattieHam = User(hattieHam_data)
+pauleyBoy = User(pauleyBoy_data)
+capAmer = User(capAmer_data)
 print("")
+
+
 # info:
-
 hattieHam.display_user_info()
 print("")
 pauleyBoy.display_user_info()
 print("")
+capAmer.display_user_info()
+print("")
 
-# set up accounts
-hattieHam.openCheckingAccount("Ham Checking", 6, 300)
-hattieHam.openSavingsAccount("Retirement", 12, 25000)
+# set up banking accounts
+hattieHam.openCheckingAccount(
+    "Ham Checking", 3, 600).openSavingsAccount("HH-Retirement", 12, 2500)
 pauleyBoy.openSavingsAccount(
-    "Pauls Savings", 9, 6000).openCheckingAccount("P-Check", 3, 4500)
+    "Pauls Savings", 5, 12000).openCheckingAccount("P-Check", 3, 4500)
+capAmer.openSavingsAccount(
+    "CaptainAmerica Savings", 7, 15000).openCheckingAccount("CaptainAmerica Checking", 2, 1500)
+print("")
 
-hattieHam.savings.yield_interest().deposit(25).withdraw(300)
-pauleyBoy.checking.withdraw(92)
-pauleyBoy.savings.withdraw(605)
+#  Make desposits, get interest, make withdrawals
+hattieHam.savings.deposit(25).yield_interest().withdraw(300)
+pauleyBoy.checking.withdraw(92).deposit(25).yield_interest().withdraw(300)
+capAmer.savings.withdraw(605).deposit(25).yield_interest().withdraw(300)
 hattieHam.checking.yield_interest().withdraw(600).withdraw(4500)
-hattieHam.display_user_info()
 pauleyBoy.savings.deposit(900).yield_interest().withdraw(500)
-
-
-hattieHam.display_user_info()
-print("")
-pauleyBoy.display_user_info()
 print("")
 
-# *    ---------- working on the transfer ---------------
+# Make transfers
 hattieHam.checking.transfer_money(pauleyBoy, 100)
+capAmer.savings.transfer_money(hattieHam, 1000)
+pauleyBoy.checking.transfer_money(capAmer, 500)
+print("")
+
+#  Display info again
 hattieHam.display_user_info()
 print("")
 pauleyBoy.display_user_info()
 print("")
+capAmer.display_user_info()
+print("")
 
+#  Display Only Bank Info
 BankAccount.print_all_balances()
 BankAccount.bank_information()
